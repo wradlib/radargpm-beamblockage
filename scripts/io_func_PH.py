@@ -5,6 +5,47 @@ import os
 from osgeo import gdal
 
 
+def read_data_sr_gr(platf, ee, sr_file, gr2sr_file):
+      
+    # read matching GR data
+    try:
+        gr_data = read_gr_PH(gr2sr_file)
+    except IndexError:
+        raise LayoutError('Layout issues.')
+    except ValueError:
+        raise LayoutError('Ground radar data layout does not match.')
+    
+    nray_gr = gr_data['nbeam'].astype("i4")[ee]
+    ngate_gr = gr_data['ngate'].astype("i4")[ee]
+    dr_gr = gr_data['dr'][ee]
+    elev_gr = gr_data['elang'][ee]
+    lon0_gr = gr_data['lon']
+    lat0_gr = gr_data['lat']
+    alt0_gr = gr_data['alt']
+    
+    ### Calculate GR Bounding Box
+    coord = wrl.georef.sweep_centroids(nray_gr, dr_gr, ngate_gr, elev_gr)
+    coords = wrl.georef.spherical_to_proj(coord[..., 0], 
+                                          np.degrees(coord[..., 1]),
+                                          coord[..., 2], 
+                                          (lon0_gr, lat0_gr, alt0_gr))
+    lon = coords[..., 0]
+    lat = coords[..., 1]
+    alt = coords[..., 2]
+    bbox = wrl.zonalstats.get_bbox(lon, lat)
+    
+    trmm_2a23_file, trmm_2a25_file, gpm_file, sr_data = None, None, None, None
+    
+    if platf == 'trmm':
+        # sr_file should be a two-tuple
+        trmm_2a23_file, trmm_2a25_file = sr_file[0], sr_file[1]
+        sr_data = wrl.io.read_trmm(trmm_2a23_file, trmm_2a25_file, bbox)
+    elif platf == 'gpm':
+        gpm_file = sr_file
+        sr_data = wrl.io.read_gpm(gpm_file, bbox)
+
+    return sr_data, gr_data
+
 def read_gpm(filename):
 
     pr_data = wrl.io.read_generic_hdf5(filename)
