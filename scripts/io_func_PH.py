@@ -363,7 +363,7 @@ def read_trmm(filename1, filename2):
 
 
 def read_gr_PH(filenames, loaddata=True):
-    data1, attrs1 = wrl.io.read_EDGE_netcdf(filenames[0])
+    data1, attrs1 = wrl.io.read_edge_netcdf(filenames[0])
     date = attrs1['time']
     source = attrs1['radarName-value']
 
@@ -380,7 +380,7 @@ def read_gr_PH(filenames, loaddata=True):
     valid_fnames = []
 
     for i in range(0, len(filenames)):
-        data_, attrs_ = wrl.io.read_EDGE_netcdf(filenames[i])
+        data_, attrs_ = wrl.io.read_edge_netcdf(filenames[i])
         if attrs_['MaximumRange-value'] == 120.0:
             # azimuths are rounded to a whole number as exact values differ for each scan
             a0.append(np.round(attrs_['az'], 0)[0])
@@ -428,7 +428,7 @@ def read_gr_PH(filenames, loaddata=True):
     refl = []
 
     for i in range(0, len(valid_fnames)):
-        data_, attrs_ = wrl.io.read_EDGE_netcdf(valid_fnames[i])
+        data_, attrs_ = wrl.io.read_edge_netcdf(valid_fnames[i])
         date = attrs_['time']
         sdate.append(date)
         refl.append(data_)
