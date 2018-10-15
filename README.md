@@ -10,4 +10,4 @@ The workflow is divided into three parts:
 
 2. SR-GR matching ([for TRMM](https://github.com/wradlib/radargpm-beamblockage/blob/master/scripts/02_Workflow_TRMM.ipynb) | [for GPM](https://github.com/wradlib/radargpm-beamblockage/blob/master/scripts/03_Workflow_GPM.ipynb)) incorporating the use of Q_BBF map in assigning a quality value for each matched point. 
 
-3. [Comparison and analysis of matched points.](https://github.com/wradlib/radargpm-beamblockage/blob/master/scripts/05_Overpass_analysis.ipynb) To switch between TRMM and GPM analysis, change the variable `platf` under section 3 to `trmm` or `gpm`.
+3. [Comparison and analysis of matched points.](https://github.com/wradlib/radargpm-beamblockage/blob/master/scripts/04_Overpass_analysis.ipynb) To switch between TRMM and GPM analysis, change the variable `platf` under section 3 to `trmm` or `gpm`.
